@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Fit Resume Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>CV Fit Analyzer</h1>
+            <p>Advanced Candidate Screening & Selection Tool.</p>
+        </header>
+
+        <main>
+            <!-- Step Indicators -->
+            <div class="stepper">
+                <div class="step-indicator active" id="ind-step1">1. Job Details</div>
+                <div class="step-indicator" id="ind-step2">2. Upload Resumes</div>
+                <div class="step-indicator" id="ind-step3">3. Threshold</div>
+            </div>
+
+            <form id="wizardForm">
+                <!-- STEP 1: Job Description -->
+                <div class="step-section active" id="step1">
+                    <div class="card">
+                        <h2>Step 1: Provide Job Description</h2>
+
+                        <!-- Tabs -->
+                        <div class="tabs">
+                            <button type="button" class="tab-btn active" onclick="switchTab('text')">Paste Text</button>
+                            <button type="button" class="tab-btn" onclick="switchTab('file')">Upload PDF</button>
+                        </div>
+
+                        <!-- Text Input -->
+                        <div id="jd-text-group" class="form-group">
+                            <textarea id="job_description" name="job_description"
+                                placeholder="Paste the job description here..."></textarea>
+                        </div>
+
+                        <!-- File Input -->
+                        <div id="jd-file-group" class="form-group hidden">
+                            <div class="file-upload-wrapper">
+                                <input type="file" id="jd_file" name="jd_file" accept=".pdf">
+                                <span class="file-custom jd-custom">Choose JD PDF...</span>
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <button type="button" class="btn-next" onclick="nextStep(2)">Next: Upload Resumes
+                                &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Upload Resumes -->
+                <div class="step-section hidden" id="step2">
+                    <div class="card">
+                        <h2>Step 2: Upload Candidate Resumes</h2>
+                        <div class="form-group">
+                            <div class="file-upload-wrapper">
+                                <input type="file" id="resumes" name="resumes" accept=".pdf" multiple required>
+                                <span class="file-custom resume-custom">Choose files...</span>
+                            </div>
+                            <div class="actions">
+                                <button type="button" class="btn-back" onclick="prevStep(1)">&larr; Back</button>
+                                <button type="button" class="btn-next" onclick="nextStep(3)">Next: Set Threshold
+                                    &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Threshold -->
+                <div class="step-section hidden" id="step3">
+                    <div class="card">
+                        <h2>Step 3: Set Selection Criteria</h2>
+                        <div class="form-group slider-group">
+                            <label for="threshold"
+                                style="font-size: 1.1rem; display: block; margin-bottom: 15px; font-weight: 600;">Match
+                                Threshold: <span id="thresholdValue"
+                                    style="color: var(--primary-color); font-weight: 700; font-size: 1.5rem; vertical-align: middle;">0.5</span></label>
+                            <input type="range" id="threshold" name="threshold" min="0" max="1" step="0.1" value="0.5"
+                                style="width: 100%; cursor: pointer;">
+
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-back" onclick="prevStep(2)">&larr; Back</button>
+                            <button type="submit" id="analyzeBtn">Run Analysis</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Loading -->
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>Analyzing candidates against criteria...</p>
+            </div>
+
+            <!-- Results -->
+            <div id="result" class="card result-section hidden">
+                <div class="result-header">
+                    <h2>Analysis Results</h2>
+                    <button id="downloadBtn" class="btn-download">Download Report ⬇️</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Candidate</th>
+                                <th>Score</th>
+                                <th>Sections Found</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <button type="button" class="btn-back" onclick="location.reload()" style="margin-top: 20px;">Start New
+                    Analysis</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>CV Fit Resume Analyzer Project</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

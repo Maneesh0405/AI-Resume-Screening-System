@@ -17,7 +17,7 @@
         </header>
 
         <main>
-            <!-- Step Indicators -->
+
             <div class="stepper">
                 <div class="step-indicator active" id="ind-step1">1. Job Details</div>
                 <div class="step-indicator" id="ind-step2">2. Upload Resumes</div>
@@ -25,24 +25,23 @@
             </div>
 
             <form id="wizardForm">
-                <!-- STEP 1: Job Description -->
                 <div class="step-section active" id="step1">
                     <div class="card">
                         <h2>Step 1: Provide Job Description</h2>
 
-                        <!-- Tabs -->
+
                         <div class="tabs">
                             <button type="button" class="tab-btn active" onclick="switchTab('text')">Paste Text</button>
                             <button type="button" class="tab-btn" onclick="switchTab('file')">Upload PDF</button>
                         </div>
 
-                        <!-- Text Input -->
+
                         <div id="jd-text-group" class="form-group">
                             <textarea id="job_description" name="job_description"
                                 placeholder="Paste the job description here..."></textarea>
                         </div>
 
-                        <!-- File Input -->
+
                         <div id="jd-file-group" class="form-group hidden">
                             <div class="file-upload-wrapper">
                                 <input type="file" id="jd_file" name="jd_file" accept=".pdf">
@@ -57,7 +56,6 @@
                     </div>
                 </div>
 
-                <!-- STEP 2: Upload Resumes -->
                 <div class="step-section hidden" id="step2">
                     <div class="card">
                         <h2>Step 2: Upload Candidate Resumes</h2>
@@ -75,7 +73,6 @@
                     </div>
                 </div>
 
-                <!-- STEP 3: Threshold -->
                 <div class="step-section hidden" id="step3">
                     <div class="card">
                         <h2>Step 3: Set Selection Criteria</h2>
@@ -96,13 +93,11 @@
                 </div>
             </form>
 
-            <!-- Loading -->
             <div id="loading" class="hidden">
                 <div class="spinner"></div>
                 <p>Analyzing candidates against criteria...</p>
             </div>
 
-            <!-- Results -->
             <div id="result" class="card result-section hidden">
                 <div class="result-header">
                     <h2>Analysis Results</h2>
@@ -120,7 +115,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Rows injected by JS -->
+
                         </tbody>
                     </table>
                 </div>

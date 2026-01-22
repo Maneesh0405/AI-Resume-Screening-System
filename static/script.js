@@ -1,9 +1,6 @@
+let jdMode = 'text';
 
-let jdMode = 'text'; // 'text' or 'file'
-
-// Step Navigation
 function nextStep(step) {
-    // Validation
     if (step === 2) {
         if (jdMode === 'text') {
             const jd = document.getElementById('job_description').value;
@@ -32,7 +29,7 @@ function prevStep(step) {
     document.getElementById('ind-step' + step).classList.add('active');
 }
 
-// Tab Switch
+
 function switchTab(type) {
     jdMode = type;
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -47,7 +44,7 @@ function switchTab(type) {
     }
 }
 
-// File Input Display
+
 document.getElementById('resumes').addEventListener('change', function (e) {
     const count = e.target.files.length;
     document.querySelector('.resume-custom').textContent = count > 0 ? `${count} files selected` : 'Choose files...';
@@ -57,15 +54,15 @@ document.getElementById('jd_file').addEventListener('change', function (e) {
     document.querySelector('.jd-custom').textContent = name || 'Choose JD PDF...';
 });
 
-// Slider Value Update
+
 const thresholdInput = document.getElementById('threshold');
 const thresholdValue = document.getElementById('thresholdValue');
 
 thresholdInput.addEventListener('input', function () {
-    thresholdValue.textContent = this.value; // Display decimal value
+    thresholdValue.textContent = this.value;
 });
 
-// Helper: section finding text
+
 function getSectionBadge(name, found) {
     if (found) {
         return `<span class="badge success">${name} ✓</span>`;
@@ -73,21 +70,21 @@ function getSectionBadge(name, found) {
     return `<span class="badge danger">${name} ✗</span>`;
 }
 
-// Form Submission
+
 document.getElementById('analyzeBtn').addEventListener('click', async function (e) {
     e.preventDefault();
 
     const form = document.getElementById('wizardForm');
     const formData = new FormData(form);
 
-    // Handle JD Mode Logic
+
     if (jdMode === 'text') {
         formData.delete('jd_file');
     } else {
         formData.delete('job_description');
     }
 
-    // Show Loading
+
     document.getElementById('wizardForm').classList.add('hidden');
     document.querySelector('.stepper').classList.add('hidden');
     document.getElementById('loading').classList.remove('hidden');
@@ -104,20 +101,17 @@ document.getElementById('analyzeBtn').addEventListener('click', async function (
         if (response.ok) {
             document.getElementById('loading').classList.add('hidden');
             document.getElementById('result').classList.remove('hidden');
-            document.querySelector('header').classList.add('hidden'); // Hide header to focus on results
+            document.querySelector('header').classList.add('hidden');
 
             const tbody = document.querySelector('#resultsTable tbody');
             tbody.innerHTML = '';
 
             data.results.forEach(r => {
                 const tr = document.createElement('tr');
-                // Status Class
                 let statusClass = 'status-rejected';
                 if (r.status === 'Selected') statusClass = 'status-selected';
-                if (r.status === 'Error') statusClass = 'status-rejected'; // Red for error too
+                if (r.status === 'Error') statusClass = 'status-rejected';
 
-                // Construct Sections HTML
-                // We show vital ones
                 let sectionsHtml = '<div class="badges">';
                 sectionsHtml += getSectionBadge('Skills', r.sections.Skills);
                 sectionsHtml += getSectionBadge('Projects', r.sections.Projects);
@@ -125,7 +119,7 @@ document.getElementById('analyzeBtn').addEventListener('click', async function (
                 sectionsHtml += getSectionBadge('Exp', r.sections.Experience);
                 sectionsHtml += '</div>';
 
-                // Recommendation tooltip or text
+
                 const recHtml = `<div style="font-size:0.85rem; color: #666; margin-top:4px;">${r.recommendation}</div>`;
 
                 tr.innerHTML = `
@@ -134,13 +128,13 @@ document.getElementById('analyzeBtn').addEventListener('click', async function (
                         <div style="font-weight:600;">${r.filename}</div>
                         ${recHtml}
                     </td>
-                    <td><div class="score-circle" style="--p:${r.score}">${Math.round(r.score)}%</div></td>
+                    <td><span style="font-weight: 600; color: var(--primary-color);">${Math.round(r.score)}%</span></td>
                     <td>${sectionsHtml}</td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            // Store for download if needed (not implemented in this simplified script but keeping placeholder if user asks)
+
             currentAnalysisResults = data.results;
 
         } else {
